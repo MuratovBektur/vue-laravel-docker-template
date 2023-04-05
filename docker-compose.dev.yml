@@ -1,10 +1,10 @@
 version: '3.9'
 
-name: vue-laravel-docker-template_dev
+name: envybox_dev
 
 services:
   client:
-    container_name: vue-laravel-docker-template_dev_client
+    container_name: envybox_dev_client
     build:
       context: ./client
       dockerfile: Dockerfile_dev
@@ -25,7 +25,7 @@ services:
       args:
         WWWGROUP: ${WWWGROUP:?}
         WWWUSER: ${WWWUSER:?}
-    container_name: vue-laravel-docker-template_dev_server
+    container_name: envybox_dev_server
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     expose: 
@@ -44,7 +44,7 @@ services:
   nginx:
     image: nginx
     restart: "no"
-    container_name: vue-laravel-docker-template_dev_nginx
+    container_name: envybox_dev_nginx
     ports:
       - ${DOCKER_PORT:-7000}:80
     depends_on:
@@ -55,7 +55,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./nginx/dev:/etc/nginx/conf.d  
   db:
-    container_name: vue-laravel-docker-template_dev_db
+    container_name: envybox_dev_db
     image: mysql:5.5
     restart: unless-stopped
     ports:
@@ -70,7 +70,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: vue-laravel-docker-template_dev_phpmyadmin
+    container_name: envybox_dev_phpmyadmin
     restart: unless-stopped
     tty: true
     depends_on:
