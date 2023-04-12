@@ -1,10 +1,10 @@
 version: '3.9'
 
-name: envybox_dev
+name: vue-laravel-docker-template_dev
 
 services:
   client:
-    container_name: envybox_dev_client
+    container_name: vue-laravel-docker-template_dev_client
     build:
       context: ./client
       dockerfile: Dockerfile_dev
@@ -18,6 +18,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./client:/app
       - ./configs/client/.env.dev:/app/.env
+      
   server:
     build:
       context: ./server/vendor/laravel/sail/runtimes/8.2
@@ -25,7 +26,7 @@ services:
       args:
         WWWGROUP: ${WWWGROUP:?}
         WWWUSER: ${WWWUSER:?}
-    container_name: envybox_dev_server
+    container_name: vue-laravel-docker-template_dev_server
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     expose: 
@@ -44,18 +45,19 @@ services:
   nginx:
     image: nginx
     restart: "no"
-    container_name: envybox_dev_nginx
+    container_name: vue-laravel-docker-template_dev_nginx
     ports:
       - ${DOCKER_PORT:-7000}:80
     depends_on:
       - client
       - server
-      - phpmyadmin
+      - dbgate
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./nginx/dev:/etc/nginx/conf.d  
+
   db:
-    container_name: envybox_dev_db
+    container_name: vue-laravel-docker-template_dev_db
     image: mysql:5.5
     restart: unless-stopped
     ports:
@@ -68,16 +70,15 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD:?}
       MYSQL_DATABASE: ${DB_DATABASE:?}
 
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: envybox_dev_phpmyadmin
-    restart: unless-stopped
-    tty: true
+  dbgate:
+    image: dbgate/dbgate
+    container_name: vue-laravel-docker-template_dev_dbgate
+    restart: always
     depends_on:
       - db
     expose:
-      - 80
+      - 3000
+    volumes:
+      - ./dbgate/dev:/root/.dbgate
     environment:
-      PMA_ABSOLUTE_URI: http://localhost:${DOCKER_PORT:-7000}/pma/
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?}
+      WEB_ROOT: /dba

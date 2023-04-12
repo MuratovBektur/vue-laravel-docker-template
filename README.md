@@ -45,7 +45,7 @@ cd server
 
 ## Инструменты разработки
 
-Для облегчения работы с Mysql в режиме разработки - phpmyadmin доступен в http://localhost:DOCKER_PORT/pma/:
+Для облегчения работы с СУБД в режиме разработки - админка СУБД (dbgate) доступен в http://localhost:DOCKER_PORT/dba/:
 
 Для облегчения работы с Laravel (https://laravel.com/docs/sail) в docker контейнере:
 

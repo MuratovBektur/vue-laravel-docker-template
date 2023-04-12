@@ -1,6 +1,6 @@
 version: '3.9'
 
-name: envybox_prod
+name: vue-laravel-docker-template_prod
 
 services:
   server:
@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       args:
         WWWGROUP: '${WWWGROUP:?}'
-    container_name: envybox_prod_server
+    container_name: vue-laravel-docker-template_prod_server
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     expose: 
@@ -28,7 +28,7 @@ services:
   nginx:
     image: nginx
     restart: "no"
-    container_name: envybox_prod_nginx
+    container_name: vue-laravel-docker-template_prod_nginx
     ports:
       - ${DOCKER_PORT:-80}:80
     depends_on:
@@ -40,7 +40,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./nginx/prod:/etc/nginx/conf.d  
   db:
-    container_name: envybox_prod_db
+    container_name: vue-laravel-docker-template_prod_db
     image: mysql:5.5
     restart: unless-stopped
     ports:
